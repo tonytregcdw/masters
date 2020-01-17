@@ -3,7 +3,9 @@ powershell masters
 powershell masters - module version 2.0
 Author: Tony Tregidgo - Aug 2020
 
-Installation:
+Run the install-masters.ps1 script to install.
+
+Manual Installation:
 
 1. masters folder and all subdirectories to c:\masters\scripts\login\
 login.ps1 --> c:\masters\scripts\login
