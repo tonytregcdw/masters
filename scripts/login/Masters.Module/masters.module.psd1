@@ -1,4 +1,4 @@
-# Copyright (c) 2012. All rights reserved.
+# Copyright (c) 2020. All rights reserved.
 
 <#
 
@@ -18,7 +18,7 @@ ModuleVersion = '1.0'
 Author = 'Tony Tregidgo'
 
 # Copyright statement for this module
-Copyright = '(c) 2012. All rights reserved.'
+Copyright = '(c) 2020. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Admin tools, and logon scripts for windows terminal server environment'

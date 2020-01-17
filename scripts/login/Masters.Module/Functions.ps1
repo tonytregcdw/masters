@@ -145,8 +145,121 @@ trap {Continue;}
            l_CheckError $Error[0], "Function i_Subst - ", 25010, $strUserName 
 }
 
+#========================================================================================
+# Function: Map-Drive
+#
+# Purpose: Maps a drive
+#
+# Inputs: 
+# $LocalPath - local drive letter.
+# $RemotePath - SMB share           
+#
+# Outputs: maps the drive
+#========================================================================================
+Function MapDrive {
+
+    [CmdletBinding()]
+    Param(
+        [parameter(Mandatory=$True)]
+        [String]$LocalPath,
+        [parameter(Mandatory=$True)]
+        [String]$RemotePath
+    )
+    $return = $false
+
+	Try{
+		if (Get-SmbMapping | where { $_.localpath -eq $LocalPath })
+		{
+			Remove-SmbMapping -LocalPath $LocalPath -Force -UpdateProfile -Confirm:$false
+			WriteLog -LogFile $strLogFile -Value "Force removed: [$LocalPath]" -Component $strSection -Severity 1
+		}
+	} Catch {
+		WriteLog -LogFile $strLogFile -Value "Error removing: [$LocalPath]]. $_" -Component $strSection -Severity 1
+	}
+
+	Try{
+		New-SmbMapping -LocalPath $LocalPath -RemotePath $RemotePath -Persistent:$true
+		$return = $true
+	} Catch {
+		WriteLog -LogFile $strLogFile -Value "Error mapping drive [$LocalPath] to: [$RemotePath]. $_" -Component $strSection -Severity 3
+	}
+       
+    return $return
+}
 
 
+#========================================================================================
+# Function: WriteLog
+#
+# Purpose: Writes a line to the log file
+#
+# Inputs:        
+#
+# Outputs: 
+#========================================================================================
+Function WriteLog {
+    #Define and validate parameters
+    [CmdletBinding()]
+    Param(
+        #Path to the log file
+        [parameter(Mandatory=$True)]
+        [String]$LogFile,
+
+        #The information to log
+        [parameter(Mandatory=$True)]
+        [String]$Value,
+
+        #The source of the error
+        [parameter(Mandatory=$True)]
+        [String]$Component,
+
+        #The severity (1 - Information, 2- Warning, 3 - Error)
+        [parameter(Mandatory=$True)]
+        [ValidateRange(1,3)]
+        [Single]$Severity
+        )
+
+
+    #Obtain UTC offset
+    $DateTime = New-Object -ComObject WbemScripting.SWbemDateTime
+    $DateTime.SetVarDate($(Get-Date))
+    $UtcValue = $DateTime.Value
+    $UtcOffset = $UtcValue.Substring(21, $UtcValue.Length - 21)
+
+    # Delete large log file
+    If(test-path -Path $LogFile -ErrorAction SilentlyContinue)
+    {
+        $LogFileDetails = Get-ChildItem -Path $LogFile
+        If ( $LogFileDetails.Length -gt 5mb )
+        {
+            Remove-item -Path $LogFile -Force -Confirm:$false
+        }
+    }
+
+    #Create the line to be logged
+    $LogLine =  "<![LOG[$Value]LOG]!>" +`
+                "<time=`"$(Get-Date -Format HH:mm:ss.fff)$($UtcOffset)`" " +`
+                "date=`"$(Get-Date -Format M-d-yyyy)`" " +`
+                "component=`"$Component`" " +`
+                "context=`"$([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)`" " +`
+                "type=`"$Severity`" " +`
+                "thread=`"$($pid)`" " +`
+                "file=`"`">"
+
+    #Write the line to the passed log file
+    Out-File -InputObject $LogLine -Append -NoClobber -Encoding Default -FilePath $LogFile -WhatIf:$False
+
+    Switch ($component) {
+
+        1 { Write-Information -MessageData $Value }
+        2 { Write-Warning -Message $Value }
+        3 { Write-Error -Message $Value }
+
+    }
+
+    write-output -InputObject $Value
+
+}
 
 #========================================================================================
 # Function: l_CheckError

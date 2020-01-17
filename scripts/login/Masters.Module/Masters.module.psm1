@@ -8,18 +8,22 @@
 . $psScriptRoot\Variables.ps1
 . $psScriptRoot\Functions.ps1
 . $psScriptRoot\DriveMap.ps1
+. $psScriptRoot\PrinterMap.ps1
 . $psScriptRoot\DDesktop.ps1
 . $psScriptRoot\Masters.ps1
 
 $exportedCommands = @( `
     "DDesktop", `
     "DriveMap", `
+    "PrinterMap", `
     "enumgroup", `
     "RegWrite", `
     "Reg_DeleteKey", `
     "l_HideFolder", `
     "l_UnHideFolder", `
     "l_CheckError", `
+    "WriteLog", `
+    "MapDrive", `	
     "Masters" `
 )
 

@@ -19,9 +19,35 @@ trap {Continue;}
 
 write-host "running all users"
 
-#Auto End Tasks
-RegWrite "hkcu:\Control Panel\Desktop", "AutoEndTasks", "String", "1"
-RegWrite "hkcu:\Control Panel\Desktop", "WaittoKillAppTimeout", "String", "20000"
+
+﻿New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SystemPaneSuggestionsEnabled -Value 0 -PropertyType DWORD -Force
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SubscribedContent-338388Enabled -Value 0 -PropertyType DWORD -Force
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SubscribedContent-338389Enabled -Value 0 -PropertyType DWORD -Force
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SubscribedContent-353696Enabled -Value 0 -PropertyType DWORD -Force
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SilentInstalledAppsEnabled -Value 0 -PropertyType DWORD -Force
+
+## following disabled, as standard user doesnt have write permissions under HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies
+#$RegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+#IF(!(Test-Path $RegPath))
+#{
+#New-Item -Path $RegPath -Force
+#New-ItemProperty -Path $RegPath -Name NoDrives -Value "7" -PropertyType DWORD -Force
+#}
+#ELSE
+#{
+#New-ItemProperty -Path $RegPath -Name NoDrives -Value "7" -PropertyType DWORD -Force
+#}
+
+# Perform logon tasks for DH Users:
+if ($userContext.ismemberof($context, 1, "dh-ug-everyone"))
+{
+	MapDrive -LocalPath P: -RemotePath "\\dccdc-dh03.derbyhomes.derbyad.net\Public"
+	MapDrive -LocalPath T: -RemotePath "\\dccdc-dh03.derbyhomes.derbyad.net\Team"
+	#net use P: \\dccdc-dh03.derbyhomes.derbyad.net\Public
+	#net use T: \\dccdc-dh03.derbyhomes.derbyad.net\Team
+	#New-PSDrive -Name P -PSProvider FileSystem -Root "\\dccdc-dh03.derbyhomes.derbyad.net\Public" -Persist -Scope Global
+	#New-PSDrive -Name T -PSProvider FileSystem -Root "\\dccdc-dh03.derbyhomes.derbyad.net\Team" -Persist -Scope Global
+}
 
 #//
 #//	FOLDER REDIRECTION

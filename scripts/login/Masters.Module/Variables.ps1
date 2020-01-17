@@ -18,7 +18,8 @@ trap {Continue;}
 #################################################################################################
 
 
-
+# Set the section of the script being processed
+$strSection = "init"
 
 # Set the location of the Masters directory
 $strMasters = "C:\Masters\" 
@@ -37,6 +38,11 @@ $strGroupID = "SEC_"
 
 #Drive mapping group prefix
 $strGroupDriveID = "DRV_"
+
+#Log File Info
+$strLogPath = "$env:Temp"
+$strLogName = "masters-Login-Script.log"
+$strLogFile = Join-Path -Path $strLogPath -ChildPath $strLogName
 
 
 #################################################################################################
@@ -93,3 +99,8 @@ $UserObj = (new-object System.Security.Principal.WindowsPrincipal([System.Securi
 #Get the user distinguished name
 $strUserDN = $userContext.DistinguishedName
 
+#Get list of user groups
+$strGroupList = $userContext.GetGroups() | Select-Object Name  | Where-Object {!($_.psiscontainer)} | foreach {$_.Name}
+
+#Get connection latency
+$strLatency = Test-Connection -computername $strDNSDomainName -Count 1 | Select-Object responsetime  | Where-Object {!($_.psiscontainer)} | foreach {$_.responsetime}
