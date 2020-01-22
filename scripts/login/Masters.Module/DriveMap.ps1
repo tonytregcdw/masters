@@ -16,19 +16,6 @@ Function DriveMap {
 		{
 		$Letter,$Mapping = $Drive.split(':')
 		MapDrive -LocalPath $Letter`: -RemotePath $Mapping
-#		Try{
-#			Remove-SmbMapping -LocalPath $Letter`: -Force -UpdateProfile -Confirm:$false
-#			WriteLog -LogFile $strLogFile -Value "Force removed: [$Letter]" -Component $strSection -Severity 1
-#		} Catch {
-#			WriteLog -LogFile $strLogFile -Value "Error removing: [$Letter]]. $_" -Component $strSection -Severity 1
-#		}
-#
-#		Try{
-#			New-SmbMapping -LocalPath $Letter`: -RemotePath $Mapping -Persistent:$true
-#			$return = $true
-#		} Catch {
-#			WriteLog -LogFile $strLogFile -Value "Error mapping drive [$Letter] to: [$RemotePath]. $_" -Component $strSection -Severity 3
-#		}
 	}
 }
 

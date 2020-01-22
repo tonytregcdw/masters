@@ -25,13 +25,13 @@ $strSection = "init"
 $strMasters = "C:\Masters\" 
  
 #Location of Dynamic Desktop Shortcuts
-$strShortcuts = "C:\Masters\Admin\Shortcuts\"
+$strShortcuts = "C:\Masters\scripts\login\shortcuts\startmenu\"
  
 #Location of Desktop Shortcuts
-$strDesktopShortcuts = "C:\Masters\Admin\Desktop\"
+$strDesktopShortcuts = "C:\Masters\scripts\login\shortcuts\Desktop\"
  
 #Location of Application Compatibility Scripts
-$strAppScript = "C:\Masters\Scripts\Login\"
+$strAppScript = "C:\Masters\Scripts\Login\appscripts\"
  
 #Citrix group identifier prefix (eg. CTX_)
 $strGroupID = "SEC_"
@@ -51,8 +51,11 @@ $strLogFile = Join-Path -Path $strLogPath -ChildPath $strLogName
 #
 #################################################################################################
 
-#Get the Users Application data path from the environs
+#Get the user Application data path
 $strAppdata = [Environment]::GetFolderPath("ApplicationData")
+
+#Get the user start menu location
+$StrStartMenu = [Environment]::GetFolderPath("StartMenu")
 
 #Get the Users HomePath from the environs
 $strHomePath = get-content env:HomePath
@@ -81,10 +84,14 @@ $strUserName = get-content env:UserName
 #Get the DNS name of the AD domain
 $strDNSDomainName = $env:USERDNSDOMAIN
 
+#retrieve AD user details
 Add-Type -AssemblyName System.DirectoryServices.AccountManagement
 $context = New-Object System.DirectoryServices.AccountManagement.PrincipalContext([System.DirectoryServices.AccountManagement.ContextType]::Domain, $strDNSDomainName)
-
 $userContext = [System.DirectoryServices.AccountManagement.UserPrincipal]::FindByIdentity($context, $strUserName);
+
+#Get list of AD user groups
+$strADGroupList = $userContext.GetGroups() | Select-Object Name  | Where-Object {!($_.psiscontainer)} | foreach {$_.Name}
+
 
 #Get the LDAP user object
 #$strFilter = "(&(objectCategory=User)(samAccountName=$strUserName))"
@@ -99,8 +106,16 @@ $UserObj = (new-object System.Security.Principal.WindowsPrincipal([System.Securi
 #Get the user distinguished name
 $strUserDN = $userContext.DistinguishedName
 
-#Get list of user groups
-$strGroupList = $userContext.GetGroups() | Select-Object Name  | Where-Object {!($_.psiscontainer)} | foreach {$_.Name}
+#Grab the User Principal Name
+$StrUPN = whoami /upn
+
+#Retrieve AAD user details
+$AADLogin = Connect-AzureAD -AccountId $StrUPN
+$StrTenantID =($AADLogin.TenantId.Guid)
+$AADUser = Get-AzureADUser -ObjectId $StrUPN
+
+#Get list of AAD user groups
+$strAADGroupList = Get-AzureADUserMembership -ObjectId $StrUPN  | Select-Object DisplayName  | Where-Object {!($_.psiscontainer)} | foreach {$_.DisplayName}
 
 #Get connection latency
 $strLatency = Test-Connection -computername $strDNSDomainName -Count 1 | Select-Object responsetime  | Where-Object {!($_.psiscontainer)} | foreach {$_.responsetime}

@@ -18,7 +18,7 @@
 trap {Continue;}
 
 write-host "running all users"
-
+WriteLog -LogFile $strLogFile -Value "Running all users for: [$strUserDN]" -Component $strSection -Severity 1
 
 ﻿New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SystemPaneSuggestionsEnabled -Value 0 -PropertyType DWORD -Force
 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SubscribedContent-338388Enabled -Value 0 -PropertyType DWORD -Force
@@ -26,27 +26,12 @@ New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentD
 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SubscribedContent-353696Enabled -Value 0 -PropertyType DWORD -Force
 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SilentInstalledAppsEnabled -Value 0 -PropertyType DWORD -Force
 
-## following disabled, as standard user doesnt have write permissions under HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies
-#$RegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-#IF(!(Test-Path $RegPath))
-#{
-#New-Item -Path $RegPath -Force
-#New-ItemProperty -Path $RegPath -Name NoDrives -Value "7" -PropertyType DWORD -Force
-#}
-#ELSE
-#{
-#New-ItemProperty -Path $RegPath -Name NoDrives -Value "7" -PropertyType DWORD -Force
-#}
 
 # Perform logon tasks for DH Users:
 if ($userContext.ismemberof($context, 1, "dh-ug-everyone"))
 {
 	MapDrive -LocalPath P: -RemotePath "\\dccdc-dh03.derbyhomes.derbyad.net\Public"
 	MapDrive -LocalPath T: -RemotePath "\\dccdc-dh03.derbyhomes.derbyad.net\Team"
-	#net use P: \\dccdc-dh03.derbyhomes.derbyad.net\Public
-	#net use T: \\dccdc-dh03.derbyhomes.derbyad.net\Team
-	#New-PSDrive -Name P -PSProvider FileSystem -Root "\\dccdc-dh03.derbyhomes.derbyad.net\Public" -Persist -Scope Global
-	#New-PSDrive -Name T -PSProvider FileSystem -Root "\\dccdc-dh03.derbyhomes.derbyad.net\Team" -Persist -Scope Global
 }
 
 #//

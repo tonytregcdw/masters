@@ -18,7 +18,7 @@ Function PrinterMap {
 	add-printer -connectionname $PrinterPath
 	
 	#Check for group membership and map Printer according to the description field in AD
-#	$StrGroupList | %{ if ($_.Contains($strGroupPrinterID)) 
+#	$StrADGroupList | %{ if ($_.Contains($strGroupPrinterID)) 
 #		{
 #			write-host Printer Group match for: $_
 #			$myobject = [adsi]("LDAP://$_")

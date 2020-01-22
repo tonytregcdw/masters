@@ -12,23 +12,21 @@
 #
 #=====================================================================================
 
-echo "running masters"
+WriteLog -LogFile $strLogFile -Value "running masters for user: [$strUserDN]" -Component $strSection -Severity 1
 
 Function Masters {
 	#Declare Variables
-	$AppGroupList = @()
 	$AppScriptList = @()
-	echo "running masters"
 	#Search for application compatability scripts
-	$AppScriptList = Get-ChildItem -include ''$strAppScript$strGroupID*.ps1'' -name
+	$AppScriptList = Get-ChildItem -include ''$strAppScript*.ps1'' -name
 	
-	echo "processing the following app scripts:"
+	WriteLog -LogFile $strLogFile -Value "processing the app scripts:" -Component $strSection -Severity 1
 	echo $appscriptlist
 	#Check for group membership and run scripts
 #	$AppScriptList | %{ if ($UserObj.IsInRole($StrDomainName+"\"+($_.replace(".ps1", "")))) 
 	$AppScriptList | %{ if ($userContext.ismemberof($context, 1, $_.replace(".ps1", "")))
 		{
-			echo "Group match, running script:"
+			WriteLog -LogFile $strLogFile -Value "group match, running appscript: [$strAppScript]" -Component $strSection -Severity 1
 			&$strAppScript\$_
 		}
 	}
