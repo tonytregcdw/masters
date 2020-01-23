@@ -1,6 +1,6 @@
 # masters
-powershell masters
 powershell masters - module version 2.0
+
 Author: Tony Tregidgo - Aug 2020
 
 Run the install-masters.ps1 script to install.
