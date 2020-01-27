@@ -1,11 +1,11 @@
 # masters
 powershell masters - module version 2.0
 
-Author: Tony Tregidgo - Aug 2020
+Author: Tony Tregidgo - Jan 2020
 
 Run the install-masters.ps1 script to install.
 
-Manual Installation:
+## Manual Installation:
 
 1. masters folder and all subdirectories to c:\masters\scripts\login\
 login.ps1 --> c:\masters\scripts\login
@@ -22,11 +22,12 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AppSetup
 5. Customise the environment-specific variables in c:\masters\scripts\login\masters.module\variables.ps1
 If necessary, to match the environment
 
-Usage:
+---
+## Usage:
 
 The scripts can either be run by executing:
 
-c:\masters\script\login\login.ps1
+c:\masters\scripts\login\login.ps1
 
 .. or by running:
 
@@ -34,5 +35,45 @@ import-module masters.module
 
 When importing the module, all of the functions and variables will be directly available from the standard powershell prompt - which can then be used for troubleshooting, and general admin.
 
+---
+
+## STRUCTURE
+
+- c:\masters
+  - \scripts
+  - \login
+    >contains main logon script, and all_users script
+    - \appscripts
+      >Place any application compatibility scripts in here.  Make the name of the group the same as an AAD or AD group.  The script will be run if the logged on user is a member of that group.  Eg: if a user is a member of the "msteams_users" AD group, name the script "msteams_users.ps1"
+    - \masters.module
+      >Contains all of the functions and variables that make up the module
+    - \shortcuts
+      - \startmenu
+        >Place any shortcuts you require adding the to the startmenu in here
+      - \desktop
+        >Place any shortcuts you require adding the to the desktop in here
+
+---
+## COMPONENTS
+
+- variables.ps1
+  >Contains all of the variables used by the module.  Customise the variables in this file to match your environment.
+  >When the module is loaded, all of these variables are available from a powershell prompt, making this a useful admin tool
+  
+- functions.ps1
+  >Contains all of the the functions used by the module.  Under usual circumstances, you probably wont need to edit this file.
+  >When the module is loaded, all of these variables are available from a powershell prompt.
+
+- masters.ps1
+  >master script to process the groups a user is a member of and then run the required application compatibility scripts, located within the \appscripts foder
+
+- ddesktop.ps1
+  >Sets up the dynamic desktop for the logged on user.  Processes groups a user is a member of, and then adds the required startmenu and desktop shortcuts
+  
+- logon.ps1
+  >Main logon script called by the required event.  Eg at logon, or when a user connects to the corporate network (either via a VPN or direct)
+
+---
+## EXAMPLES
 
 
