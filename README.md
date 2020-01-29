@@ -78,24 +78,42 @@ When importing the module, all of the functions and variables will be directly a
 ## EXAMPLES
 The following examples can be run from a standard powershell prompt as the logged on user, without needing to run the logon script.  And can serve as a useful tool for troubleshooting and performing admin tasks.
 
-### load the module from a powershell prompt
+### load the module from a powershell prompt:
 
 <code>import-module masters.module</code>
 
-### Display a list of all onprem AD groups the logged user is a member of
+### Display a list of all onprem AD groups the logged user is a member of:
 
 <code>$strADgroups</code>
 
-### Display a list of all Azure AD groups the logged user is a member of
+### Display a list of all Azure AD groups the logged user is a member of:
 
 <code>$strAADgroups</code>
 
-### Display the latency of the network connection (if connected to a network hosting an onprem AD)
+### Display the latency of the network connection (if connected to a network hosting an onprem AD):
 
 <code>$strlatency</code>
 
-### Run the mapdrives function.
+### Run the mapdrives function:
 
 <code>mapdrives</code>
 
-  
+### Display the userprincipalname of the logged on user
+
+<code>$StrUPN</code>
+
+### Display the DistinguishedName of the logged on user
+
+<code>$strUserDN</code>
+
+### Display the user profile location
+
+<code>$strUserProfile</code>
+
+### Display a list of all AD nested groups a user is a member of.  Works across forest trust:
+
+<code>enumgroup($struserdn)</code>
+
+### Map a network drive (checks for existing drives)
+
+<code>MapDrive
