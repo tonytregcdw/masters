@@ -76,4 +76,11 @@ When importing the module, all of the functions and variables will be directly a
 ---
 ## EXAMPLES
 
+### load the module from a powershell prompt
+
+<code>import-module masters.module</code>
+
+### Display a list of all onprem AD groups the logged user is a member of
+
+<code>$strADgroups</code>
 
