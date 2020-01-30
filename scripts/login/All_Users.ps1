@@ -27,13 +27,6 @@ New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentD
 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SilentInstalledAppsEnabled -Value 0 -PropertyType DWORD -Force
 
 
-# Perform logon tasks for DH Users:
-if ($userContext.ismemberof($context, 1, "dh-ug-everyone"))
-{
-	MapDrive -LocalPath P: -RemotePath "\\dccdc-dh03.derbyhomes.derbyad.net\Public"
-	MapDrive -LocalPath T: -RemotePath "\\dccdc-dh03.derbyhomes.derbyad.net\Team"
-}
-
 #//
 #//	FOLDER REDIRECTION
 #//
@@ -63,3 +56,5 @@ if ($userContext.ismemberof($context, 1, "dh-ug-everyone"))
 #RegWrite "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders", "Templates", "EXPANDSTRING", $Dir
 
 l_CheckError $Error[0], "Script All_Users - ", 25012, $strUserName
+
+

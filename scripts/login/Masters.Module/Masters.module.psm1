@@ -23,7 +23,8 @@ $exportedCommands = @( `
     "l_UnHideFolder", `
     "l_CheckError", `
     "WriteLog", `
-    "MapDrive", `	
+    "MapDrive", `
+	"remove-signature", `
     "Masters" `
 )
 
@@ -42,4 +43,6 @@ Export-ModuleMember -Function $exportedCommands
 
 # .. or .. export ALL variables
 Export-ModuleMember -Variable *
+
+
 

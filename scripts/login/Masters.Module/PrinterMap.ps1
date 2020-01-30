@@ -28,6 +28,7 @@ Function PrinterMap {
 #	}
 }
 
-
 l_CheckError $Error[0], "Script Printermap - ", 25001, $strUserName
  
+
+

@@ -39,3 +39,5 @@ Function DDesktop {
 
 l_CheckError $Error[0], "Script DDesktop - ", 25001, $strUserName
  
+
+

@@ -119,3 +119,5 @@ $strAADGroupList = Get-AzureADUserMembership -ObjectId $StrUPN  | Select-Object 
 
 #Get connection latency
 $strLatency = Test-Connection -computername $strDNSDomainName -Count 1 | Select-Object responsetime  | Where-Object {!($_.psiscontainer)} | foreach {$_.responsetime}
+
+

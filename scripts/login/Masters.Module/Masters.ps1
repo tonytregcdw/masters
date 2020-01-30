@@ -21,15 +21,17 @@ Function Masters {
 	$AppScriptList = Get-ChildItem -include ''$strAppScript*.ps1'' -name
 	
 	WriteLog -LogFile $strLogFile -Value "processing the app scripts:" -Component $strSection -Severity 1
-	echo $appscriptlist
+
 	#Check for group membership and run scripts
 #	$AppScriptList | %{ if ($UserObj.IsInRole($StrDomainName+"\"+($_.replace(".ps1", "")))) 
 	$AppScriptList | %{ if ($userContext.ismemberof($context, 1, $_.replace(".ps1", "")))
 		{
-			WriteLog -LogFile $strLogFile -Value "group match, running appscript: [$strAppScript]" -Component $strSection -Severity 1
+			WriteLog -LogFile $strLogFile -Value "group match, running appscript: [$strAppScript\$_]" -Component $strSection -Severity 1
 			&$strAppScript\$_
 		}
 	}
 }
 
 l_CheckError $Error[0], "Script Masters - ", 25001, $strUserName
+
+
