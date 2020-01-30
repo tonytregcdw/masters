@@ -116,4 +116,4 @@ The following examples can be run from a standard powershell prompt as the logge
 
 ### Map a network drive (checks for existing drives)
 
-<code>MapDrive
+<code>mapdrive -localpath g: -remotepath \\fileserver\share</code>
