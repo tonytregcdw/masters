@@ -78,6 +78,31 @@ trap {Continue;}
  
  
  
+Function OfficeAddinSetOpenValue([String]$skey, [String]$sopenvalue, [String]$sdata)
+{
+ write-host "skey:"$skey
+ write-host "sopenvalue:"$sopenvalue
+ write-host "sdata:"$sdata
+ if (-Not (Get-ItemProperty -Path $skey -Name $sopenvalue) -Or ((Get-ItemProperty -Path $key -Name $sopenvalue).$sopenvalue) -eq "")
+ {
+  write-host "open key not found, creating:"$sopenvalue
+  New-ItemProperty -Path $skey -Name $sopenvalue -PropertyType "String" -Value $sdata -Force
+ }
+ else
+ {
+  if (((Get-ItemProperty -Path $key -Name $sopenvalue).$sopenvalue) -eq $sdata)
+  {
+   write-host "already set, exiting:"
+   break
+  }
+  write-host "incrementing open key, trying again:"
+  $sopenvalue -match "(OPEN)($|\d)$"
+  $newopenvalue = $matches[1] + ([int]$matches[2]+1)
+  OfficeAddinSetOpenValue $skey $newopenvalue $sdata
+ }
+}
+
+
 
 #=======================================================================================
 #
