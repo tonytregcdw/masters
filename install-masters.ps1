@@ -36,7 +36,7 @@ new-item -ItemType "directory" -Path "c:\masters"
 #copy scripts
 copy-item -Path "${PSScriptRoot}\scripts" -Destination "c:\masters" -recurse -Force
 
-#import scheduled task
+#import scheduled task to trigger logon script when VPN network is detected.
 register-scheduledtask -Xml (get-content '.\masterstrigger.xml' | out-string) -taskname "masterslogon"
 
 
