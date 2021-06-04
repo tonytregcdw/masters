@@ -7,7 +7,7 @@
 #            All Application Compatibility scripts must be named the same as the 
 #            group who needs to run them.  E.G. if you are a member of CTX_Users 
 #            then you will run the CTX_Users.ps1 script
-#            $strGroupID needs to be defined to identify users and application 
+#            $strGroupID within the variables file needs to be defined to identify users and application 
 #            compatability scripts, eg (CTX_)
 #
 #=====================================================================================
