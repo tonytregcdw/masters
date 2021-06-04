@@ -5,8 +5,8 @@
 ####get-childitem -recurse *.ps*1 | %{Set-AuthenticodeSignature $_ -Certificate $cert}
 ###############################################################################################
 
-#Install DCC trusted publisher certificate
-Import-Certificate -FilePath .\DCC-PS1.cer -CertStoreLocation Cert:\LocalMachine\TrustedPublisher
+#Install trusted publisher certificate
+#Import-Certificate -FilePath .\DCC-PS1.cer -CertStoreLocation Cert:\LocalMachine\TrustedPublisher
 
 #Install Microsoft trusted publisher certificate
 #Import-Certificate -FilePath .\Microsoft_Corporation.cer -CertStoreLocation Cert:\LocalMachine\TrustedPublisher
